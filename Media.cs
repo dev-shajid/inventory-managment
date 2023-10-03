@@ -1,7 +1,12 @@
 using System;
 
 namespace Project{
-    class Media{
+    public interface IShowable
+    {
+        void DisplayInfo();
+    }
+
+    class Media<T>{
         private string title;
         private int publish_year, id;
         public string Title{
@@ -58,6 +63,14 @@ namespace Project{
             return publish_year;
         } 
 
-
+        public static void ShowItems(List<T> items){
+            Console.WriteLine("---------------------");
+            foreach(var item in items){
+                Console.WriteLine();
+                if (item is IShowable displayable) displayable.DisplayInfo();
+            }
+            Console.WriteLine();
+            Console.WriteLine("---------------------");
+        }
     }
 }

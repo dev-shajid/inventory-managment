@@ -1,8 +1,8 @@
 using System;
 
 namespace Project{
-    partial class DVD:Media{
-        static List<DVD> DVDs=new List<DVD>{
+    partial class DVD:Media<DVD>, IShowable{
+        static List<DVD> dvds=new List<DVD>{
             new DVD("Faith Of Light" , 2005, "Shajid", 1),
             new DVD("Warrior Of Wind" , 2015, "Saimun", 2),
             new DVD("Memory Of Hope" , 2003, "Mahi", 3),
@@ -29,8 +29,8 @@ namespace Project{
     partial class DVD{
         public static void AddItem(){
             int id=1;
-            if(DVDs.Count()!=0) id=DVDs.Last().ID+1;
-            DVDs.Add(new DVD(InputNameForItem("Title"), InputYearForItem(), InputNameForItem("Director's Name"), id));
+            if(dvds.Count()!=0) id=dvds.Last().ID+1;
+            dvds.Add(new DVD(InputNameForItem("Title"), InputYearForItem(), InputNameForItem("Director's Name"), id));
         }
         public static void UpdateItem(){
             
@@ -42,7 +42,7 @@ namespace Project{
             
         }
         public static void ShowItems(){
-            
+            Media<DVD>.ShowItems(dvds);
         }
     }
 }
