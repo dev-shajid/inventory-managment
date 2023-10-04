@@ -32,12 +32,21 @@ namespace Project{
             this.publish_year=publish_year;
             this.id=id;
         }
+    }
+
+
+    // Partial Class for Action handling
+    partial class Media<T>{  
         public virtual void DisplayInfo(){
             Console.WriteLine($"ID: {ID}");
             Console.WriteLine($"Title: {title}");
             Console.WriteLine($"Publish Year: {publish_year}");
         }
         public static void ShowItems(List<T> items){
+            if(items.Count()==0){
+                Console.WriteLine("No Items is Found!");
+                return;
+            }
             Console.WriteLine("---------------------");
             foreach(var item in items){
                 Console.WriteLine();
@@ -52,23 +61,23 @@ namespace Project{
             int index = InputIDForItem(items);
             if(index==-1) return;
 
-            if(TakeBoolInput("Title")==1){
+            if(TakeBoolInput("Want to Update Title")){
                 string title=InputNameForItem("New Title");
                 items[index].Title=title;
             }
-            if(TakeBoolInput("Publish Year")==1){
+            if(TakeBoolInput("Want to Update Publish Year")){
                 int publish_year=InputYearForItem("New Publish Year");
                 items[index].Publish_Year=publish_year;
             }
-            if(items[index] is Book b && TakeBoolInput("Author")==1){
+            if(items[index] is Book b && TakeBoolInput("Want to Update Author")){
                 string author=InputNameForItem("New Author");
                 b.Author=author;
             }
-            else if(items[index] is CD cd && TakeBoolInput("Artist")==1){
+            else if(items[index] is CD cd && TakeBoolInput("Want to Update Artist")){
                 string artist=InputNameForItem("New Artist");
                 cd.Artist=artist;
             }
-            else if(items[index] is DVD dvd && TakeBoolInput("Director")==1){
+            else if(items[index] is DVD dvd && TakeBoolInput("Want to Update Director")){
                 string director=InputNameForItem("New Director");
                 dvd.Director=director;
             }
@@ -77,16 +86,83 @@ namespace Project{
             if (items[index] is IMedia obj) obj.DisplayInfo();
             Console.WriteLine("Successfully Updated Item!");
         }
-
-
-
-
-
-
-
-
-
-
+        public static void DeleteItem(List<T> items){
+            Console.WriteLine();
+            int choice=InputCriterion();
+            if(choice==1){
+                int index = InputIDForItem(items);
+                if(index==-1) return;
+                items.RemoveAt(index);
+            }
+            else if(choice==2){
+                string title=InputNameForItem("Title");
+                var lists=items.Where(x=>x.Title.Contains(title));
+                if(lists.Count()>0){
+                    string all="";
+                    if(lists.Count()>1) all=" all";
+                    if(TakeBoolInput($"{lists.Count()} items is found, do you want to delete{all}")){
+                        items.RemoveAll(x=>x.Title.Contains(title));
+                    }
+                    else{
+                        Console.WriteLine("Ok!");
+                        return;
+                    }
+                }
+                else{
+                    Console.WriteLine("No items is found!");
+                    return;
+                }
+            }
+            else if(choice==3){
+                if(typeof(T)==typeof(Book) && items is List<Book> books){
+                    Book.DeleteItemByAuthor();
+                }
+                else if(typeof(T)==typeof(CD)){
+                    // Book.DeleteItemByAuthor();
+                }
+                else if(typeof(T)==typeof(DVD)){
+                    // Book.DeleteItemByAuthor();
+                }
+                return;
+            }
+            else return;
+            
+            Console.WriteLine();
+            ShowItems(items);
+            Console.WriteLine("\nSuccessfully Deleted Item!");
+        }
+        public static void SearchItem(List<T> items){
+            Console.WriteLine();
+            int choice=InputCriterion(4);
+            List<T> lists=new List<T>();
+            if(choice==1){
+                int index = InputIDForItem(items);
+                if(index==-1) return;
+                Console.WriteLine();
+                items[index].DisplayInfo();
+                Console.WriteLine();
+                return;
+            }
+            else if(choice==2){
+                lists=SearchItemByTitle(items).ToList();
+            }
+            else if(choice==3){
+                if(typeof(T)==typeof(Book)){
+                    Book.SearchItemByAuthor();
+                }
+                else if(typeof(T)==typeof(CD)){
+                    Book.SearchItemByAuthor();
+                }
+                else if(typeof(T)==typeof(DVD)){
+                    Book.SearchItemByAuthor();
+                }
+                return;
+            }
+            else if(choice==4){
+                lists=SearchItemByPublishYear(items).ToList();
+            }
+            ShowItems(lists);
+        }
     }
 
 
@@ -134,18 +210,54 @@ namespace Project{
             }
             return index;
         } 
-        public static int TakeBoolInput(string message=""){
+        public static bool TakeBoolInput(string message=""){
             Again:
             int value=0;
             try{
-                Console.WriteLine($"Want to Update {message}? (1/0)");
+                Console.WriteLine($"{message}? (1/0)");
                 value=Convert.ToInt32(Console.ReadLine());
                 if(value!=1 && value!=0) throw new Exception("Insert Only 1 or 0");
             }catch(Exception err){
                 System.Console.WriteLine($"Error: {err.Message}");
                 goto Again;
             }
+            return value==1?true:false;
+        }
+        public static int InputCriterion(int item=3){
+            int value;
+            try{      
+                Console.WriteLine("Based On:");
+                Console.WriteLine("1. ID");
+                Console.WriteLine("2. Title");
+                if(typeof(T)==typeof(Book)) Console.WriteLine("3. Author");
+                else if(typeof(T)==typeof(CD)) Console.WriteLine("3. Artist");
+                else if(typeof(T)==typeof(DVD)) Console.WriteLine("3. DVD");
+                if(item==4) Console.WriteLine("4. Publish Year");
+                
+                value=Convert.ToInt32(Console.ReadLine());
+                if(value<1 || value>item) throw new Exception("Invalid Input!");
+            }catch(Exception err){
+                Console.WriteLine($"Error: {err.Message}");
+                return 0;
+            }
             return value;
         }
+        public static List<Book> BookAuthorSearchList(List<T> items){
+            string title=InputNameForItem("Title");
+            IEnumerable<T> l=items;
+            if(typeof(T)==typeof(Book) && items is List<Book> b) return b.Where(x=>x.Author==title).ToList();
+            return null;
+        }
+        public static IEnumerable<T> SearchItemByTitle(List<T> items){
+            string title=InputNameForItem("Title");
+            return items.Where(x=>x.Title.Contains(title));
+        }
+        public static IEnumerable<T> SearchItemByPublishYear(List<T> items){
+            int year=InputYearForItem("Publish Year");
+            return items.Where(x=>x.Publish_Year==year);
+        }
+
+
+
     }
 }

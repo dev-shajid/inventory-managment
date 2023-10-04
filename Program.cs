@@ -3,8 +3,7 @@
 namespace Project{
     class Program{
         public void AddItem(){
-            Menu2();
-            int choice=Convert.ToInt32(Console.ReadLine());
+            int choice=Menu2();
             if(choice==1) Book.AddItem();
             else if(choice==2) CD.AddItem();
             else if(choice==3) DVD.AddItem();
@@ -15,69 +14,77 @@ namespace Project{
             Console.WriteLine("Successfully Added Item!\n");
         }
         public void UpdateItem(){
-            Menu2();
-            int choice=Convert.ToInt32(Console.ReadLine());
+            int choice=Menu2();
             if(choice==1) Book.UpdateItem();
             else if(choice==2) CD.UpdateItem();
             else if(choice==3) DVD.UpdateItem();
             else Console.WriteLine("Invalid Input!");
         }
         public void DeleteItem(){
-            Menu2();
-            int choice=Convert.ToInt32(Console.ReadLine());
+            int choice=Menu2();
             if(choice==1) Book.DeleteItem();
             else if(choice==2) CD.AddItem();
             else if(choice==3) DVD.AddItem();
+            else Console.WriteLine("Invalid Input!");
+        }
+        public void SearchItem(){
+            int choice=Menu2();
+            if(choice==1) Book.SearchItem();
+            else if(choice==2) CD.SearchItem();
+            else if(choice==3) DVD.SearchItem();
             else{
                 Console.WriteLine("Invalid Input!");
                 return;
             }
-            Console.WriteLine("Successfully Deleted Item!\n");
-        }
-        public void SearchItem(){
-            Menu2();
-            int choice=Convert.ToInt32(Console.ReadLine());
-            // if(choice==1) Book.AddItem();
-            // else if(choice==2) CD.AddItem();
-            // else if(choice==3) DVD.AddItem();
-            // else{
-            //     Console.WriteLine("Invalid Input!");
-            //     return;
-            // }
         }
         public void ShowItems(){
-            Menu2();
-            int choice=Convert.ToInt32(Console.ReadLine());
+            int choice=Menu2();
             if(choice==1) Book.ShowItems();
             else if(choice==2) CD.ShowItems();
             else if(choice==3) DVD.ShowItems();
             else Console.WriteLine("Invalid Input!");
         }
-        public static void Menu1(){
-            Console.WriteLine();
-            Console.WriteLine("Choose:");
-            Console.WriteLine("1. Add Item");
-            Console.WriteLine("2. Update Item");
-            Console.WriteLine("3. Delete Item");
-            Console.WriteLine("4. Search Item");
-            Console.WriteLine("5. Show Item");
-            Console.WriteLine("6. Exit");
+        public static int Menu1(){
+            int choice;
+            Again:
+            try{
+                Console.WriteLine();
+                Console.WriteLine("Choose:");
+                Console.WriteLine("1. Add Item");
+                Console.WriteLine("2. Update Item");
+                Console.WriteLine("3. Delete Item");
+                Console.WriteLine("4. Search Item");
+                Console.WriteLine("5. Show Item");
+                Console.WriteLine("6. Exit");
+                choice=Convert.ToInt32(Console.ReadLine());
+            }catch(Exception err){
+                System.Console.WriteLine($"Error: {err.Message}");
+                goto Again;
+            }
+            return choice;
         }
-        public static void Menu2(){
-            Console.WriteLine();
-            Console.WriteLine("Choose:");
-            Console.WriteLine("1. Book");
-            Console.WriteLine("2. CD");
-            Console.WriteLine("3. DVD");
+        public static int Menu2(){
+            int choice;
+            Again:
+            try{
+                Console.WriteLine();
+                Console.WriteLine("Choose:");
+                Console.WriteLine("1. Book");
+                Console.WriteLine("2. CD");
+                Console.WriteLine("3. DVD");
+                choice=Convert.ToInt32(Console.ReadLine());
+            }catch(Exception err){
+                System.Console.WriteLine($"Error: {err.Message}");
+                goto Again;
+            }
+            return choice;
         }
 
         static void Main(string[] args){
             Console.Clear();
             Program Obj=new Program();
-            int choice;
             while(true){
-                Menu1();
-                choice=Convert.ToInt32(Console.ReadLine());
+                int choice=Menu1();
                 if(choice==1) Obj.AddItem();
                 else if(choice==2) Obj.UpdateItem(); // Update Item By ID
                 else if(choice==3) Obj.DeleteItem(); // Delete Item By ID
