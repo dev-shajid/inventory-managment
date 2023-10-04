@@ -17,25 +17,21 @@ namespace Project{
         public void UpdateItem(){
             Menu2();
             int choice=Convert.ToInt32(Console.ReadLine());
-            // if(choice==1) Book.AddItem();
-            // else if(choice==2) CD.AddItem();
-            // else if(choice==3) DVD.AddItem();
-            // else{
-            //     Console.WriteLine("Invalid Input!");
-            //     return;
-            // }
-            Console.WriteLine("Successfully Added Item!\n");
+            if(choice==1) Book.UpdateItem();
+            else if(choice==2) CD.UpdateItem();
+            else if(choice==3) DVD.UpdateItem();
+            else Console.WriteLine("Invalid Input!");
         }
         public void DeleteItem(){
             Menu2();
             int choice=Convert.ToInt32(Console.ReadLine());
-            // if(choice==1) Book.DeleteItem();
-            // else if(choice==2) CD.AddItem();
-            // else if(choice==3) DVD.AddItem();
-            // else{
-            //     Console.WriteLine("Invalid Input!");
-            //     return;
-            // }
+            if(choice==1) Book.DeleteItem();
+            else if(choice==2) CD.AddItem();
+            else if(choice==3) DVD.AddItem();
+            else{
+                Console.WriteLine("Invalid Input!");
+                return;
+            }
             Console.WriteLine("Successfully Deleted Item!\n");
         }
         public void SearchItem(){
@@ -55,10 +51,7 @@ namespace Project{
             if(choice==1) Book.ShowItems();
             else if(choice==2) CD.ShowItems();
             else if(choice==3) DVD.ShowItems();
-            else{
-                Console.WriteLine("Invalid Input!");
-                return;
-            }
+            else Console.WriteLine("Invalid Input!");
         }
         public static void Menu1(){
             Console.WriteLine();

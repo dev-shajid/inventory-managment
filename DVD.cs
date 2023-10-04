@@ -1,7 +1,7 @@
 using System;
 
 namespace Project{
-    partial class DVD:Media<DVD>, IShowable{
+    partial class DVD:Media<DVD>, IMedia{
         static List<DVD> dvds=new List<DVD>{
             new DVD("Faith Of Light" , 2005, "Shajid", 1),
             new DVD("Warrior Of Wind" , 2015, "Saimun", 2),

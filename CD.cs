@@ -1,7 +1,7 @@
 using System;
 
 namespace Project{
-partial class CD:Media<CD>, IShowable{
+partial class CD:Media<CD>, IMedia{
     static List<CD> cds=new List<CD>{
         new CD("Faith Of Light" , 2005, "Shajid", 1),
         new CD("Warrior Of Wind" , 2015, "Saimun", 2),

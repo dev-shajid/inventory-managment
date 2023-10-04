@@ -1,7 +1,7 @@
 using System;
 
 namespace Project{
-    partial class Book:Media<Book>,IShowable{
+    partial class Book:Media<Book>, IMedia{
         static List<Book> books=new List<Book>{
             new Book("Faith Of Light" , 2005, "Shajid", 1),
             new Book("Warrior Of Wind" , 2015, "Saimun", 2),
@@ -33,7 +33,7 @@ namespace Project{
             books.Add(new Book(InputNameForItem("Title"), InputYearForItem(), InputNameForItem("Author's Name"), id));
         }
         public static void UpdateItem(){
-            
+            Media<Book>.UpdateItem(Book.books);
         }
         public static void DeleteItem(){
             
@@ -42,7 +42,7 @@ namespace Project{
             
         }
         public static void ShowItems(){
-            Media<Book>.ShowItems(books);
+            Media<Book>.ShowItems(Book.books);
         }
     }
 }
